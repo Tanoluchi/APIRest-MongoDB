@@ -1,4 +1,6 @@
 const mongoose = require('mongoose');
+const moment = require('moment');
+moment.locale('es');
 
 const animeSchema = new mongoose.Schema({
 	title: {
@@ -15,9 +17,9 @@ const animeSchema = new mongoose.Schema({
 	},
 	date: {
 		type: String,
-		default: Date.now
+		default: moment()
 	},
-	score: {
+	like: {
 		type: Number,
 		default: 0
 	},
