@@ -1,4 +1,5 @@
 const express = require('express');
+const bcrypt = require('bcrypt');
 const Joi = require('joi');
 const Usuario = require('../models/usuario_model.js');
 const ruta = express.Router();
@@ -29,7 +30,7 @@ ruta.get('/', (req, res) => {
 
 // Creación
 ruta.post('/', (req, res) => {
-	let body = req.body;
+	const body = req.body;
 
 	Usuario.findOne({email: body.email}, (err, user) => {
 		if(err) return res.status(400).json({error: 'Server ERROR'});
@@ -38,7 +39,6 @@ ruta.post('/', (req, res) => {
 	});
 
 	const {error, value} = schema.validate({name: body.name, email: body.email});
-
 	if(!error){
 		let result = crearUsuario(body);
 
@@ -47,7 +47,7 @@ ruta.post('/', (req, res) => {
 				name: user.name,
 				email: user.email
 			})
-		}).catch(err => {
+		}).catch(error => {
 			res.status(400).json({
 				 error
 			})
@@ -55,7 +55,7 @@ ruta.post('/', (req, res) => {
 	}else{
 		res.status(400).json({
 			error
-		})
+		});
 	}
 });
 
@@ -89,9 +89,9 @@ ruta.delete('/:email', (req, res) => {
 			name: valor.name,
 			email: valor.email
 		})
-	}).catch(err => {
+	}).catch(error => {
 		res.status(400).json({
-			err
+			error
 		})
 	});
 });
@@ -107,7 +107,7 @@ async function crearUsuario(body){
 	let usuario = new Usuario({
 		email: body.email,
 		name : body.name,
-		password : body.password
+		password : bcrypt.hashSync(body.password, 10) 
 	});
 	return await usuario.save();
 }
