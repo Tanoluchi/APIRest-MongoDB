@@ -30,6 +30,13 @@ ruta.get('/', (req, res) => {
 // Creación
 ruta.post('/', (req, res) => {
 	let body = req.body;
+
+	Usuario.findOne({email: body.email}, (err, user) => {
+		if(err) return res.status(400).json({error: 'Server ERROR'});
+		// El usuario ya existe
+		if(user) return res.status(400).json({msj:'El usuario ya existe'});
+	});
+
 	const {error, value} = schema.validate({name: body.name, email: body.email});
 
 	if(!error){
@@ -37,7 +44,8 @@ ruta.post('/', (req, res) => {
 
 		result.then(user => {
 			res.json({
-				valor: user
+				name: user.name,
+				email: user.email
 			})
 		}).catch(err => {
 			res.status(400).json({
@@ -59,7 +67,8 @@ ruta.put('/:email', (req, res) => {
 		let result = actualizarUsuario(req.params.email, req.body);
 		result.then(valor =>{
 			res.json({
-				valor
+				name: valor.name,
+				email: valor.email
 			})
 		}).catch(err => {
 			res.status(400).json({
@@ -77,7 +86,8 @@ ruta.delete('/:email', (req, res) => {
 	let result = desactivarUsuario(req.params.email);
 	result.then(valor => {
 		res.json({
-			valor
+			name: valor.name,
+			email: valor.email
 		})
 	}).catch(err => {
 		res.status(400).json({
@@ -88,7 +98,8 @@ ruta.delete('/:email', (req, res) => {
 
 
 async function listarUsuariosActivos(){
-	let usuarios = await Usuario.find({"status": true});
+	let usuarios = await Usuario.find({"status": true})
+	.select({nombre: 1, email: 1});
 	return usuarios;
 }
 
