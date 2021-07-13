@@ -1,0 +1,10 @@
+{
+	"name" : "API Rest Express - Usuarios y Animes",
+	"configDB" : {
+
+	},
+	"configToken" : {
+		"SEED" : "secret",
+		"expiration" : "24h"
+	}
+}

@@ -1,4 +1,5 @@
 const express = require('express');
+const config = require('config');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const Usuario = require('../models/usuario_model.js');
@@ -14,7 +15,7 @@ ruta.post('/', (req, res) => {
 				// Creación del token
 				const jwToken = jwt.sign({
 					data: {_id: datos._id, nombre: datos.name, email: datos.email}
-				}, 'secret', {expiresIn: '1h'});
+				}, config.get('configToken.SEED'), {expiresIn: config.get('configToken.expiration')});
 				res.json({
 					usuario: {
 						_id: datos._id,
