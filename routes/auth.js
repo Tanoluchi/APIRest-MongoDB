@@ -14,15 +14,15 @@ ruta.post('/', (req, res) => {
 				if(!passwordValido) return res.status(400).json({error:'ok', msj: 'Usuario o contraseña incorrecta'});
 				// Creación del token
 				const jwToken = jwt.sign({
-					data: {_id: datos._id, nombre: datos.name, email: datos.email}
+					data: {_id: datos._id, name: datos.name, email: datos.email}
 				}, config.get('configToken.SEED'), {expiresIn: config.get('configToken.expiration')});
 				res.json({
 					usuario: {
 						_id: datos._id,
-						nombre: datos.name,
+						name: datos.name,
 						email: datos.email
 					},
-					token: jwToken
+					jwToken
 				});
 			}else{
 				res.status(400).json({
