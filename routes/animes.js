@@ -1,11 +1,12 @@
 const express = require('express');
 const ruta = express.Router();
 const Anime = require('../models/anime_models');
+const verificarToken = require('../middlewares/authToken');
 const moment = require('moment');
 moment.locale('es');
 const formato = 'LL';
 
-ruta.get('/', (req, res) => {
+ruta.get('/', verificarToken, (req, res) => {
 	let result = listarAnimesActivos();
 
 	result.then(anime => {

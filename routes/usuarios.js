@@ -1,4 +1,5 @@
 const express = require('express');
+const verificarToken = require('../middlewares/authToken');
 const jwt = require('jsonwebtoken');
 const config = require('config');
 const bcrypt = require('bcrypt');
@@ -18,15 +19,6 @@ const schema = Joi.object({
 	email: Joi.string()
         .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
 });
-
-let verificarToken = (req, res, next) => {
-	let token = req.get('Authorization');
-	jwt.verify(token, config.get('configToken.SEED'), (err, decoded) => {
-		if(err) return res.status(401).json({err});
-		req.usuario = decoded.usuario;
-		next();
-	});
-}
 
 ruta.get('/', verificarToken, (req, res) => {
 	let result = listarUsuariosActivos();
