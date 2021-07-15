@@ -18,7 +18,7 @@ ruta.get('/', verificarToken, (req, res) => {
 	});
 });
 
-ruta.post('/', (req, res) =>{
+ruta.post('/', verificarToken, (req, res) =>{
 	let result = crearAnime(req.body);
 
 	result.then(anime => {
@@ -28,7 +28,7 @@ ruta.post('/', (req, res) =>{
 	});
 });
 
-ruta.put('/:id', (req, res) =>{
+ruta.put('/:id', verificarToken, (req, res) =>{
 	let result = actualizarAnime(req.params.id, req.body);
 
 	result.then(anime => {
@@ -38,7 +38,7 @@ ruta.put('/:id', (req, res) =>{
 	});
 });
 
-ruta.delete('/:id', (req, res) => {
+ruta.delete('/:id', verificarToken, (req, res) => {
 	let result = desactivarAnime(req.params.id);
 
 	result.then(anime => {

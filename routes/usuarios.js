@@ -63,7 +63,7 @@ ruta.post('/', (req, res) => {
 });
 
 // Actualización
-ruta.put('/:email', (req, res) => {
+ruta.put('/:email', verificarToken, (req, res) => {
 	const {error, value} = schema.validate({name: req.body.name});
 
 	if(!error){
@@ -85,7 +85,7 @@ ruta.put('/:email', (req, res) => {
 	}
 });
 
-ruta.delete('/:email', (req, res) => {
+ruta.delete('/:email', verificarToken, (req, res) => {
 	let result = desactivarUsuario(req.params.email);
 	result.then(valor => {
 		res.json({
