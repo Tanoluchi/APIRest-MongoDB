@@ -19,7 +19,7 @@ ruta.get('/', verificarToken, (req, res) => {
 });
 
 ruta.post('/', verificarToken, (req, res) =>{
-	let result = crearAnime(req.body);
+	let result = crearAnime(req);
 
 	result.then(anime => {
 		res.json(anime)
@@ -48,14 +48,15 @@ ruta.delete('/:id', verificarToken, (req, res) => {
 	});
 });
 
-async function crearAnime(body){
-	const newDate = moment(body.date)
+async function crearAnime(req){
+	const newDate = moment(req.body.date)
 	let anime = new Anime({
-		title: body.title,
-		description : body.description,
-		gender : body.gender,
+		title : req.body.title,
+		autor : req.usuario._id,
+		description : req.body.description,
+		gender : req.body.gender,
 		date : newDate.format(formato),
-		like : body.like
+		like : req.body.like
 	});
 	return await anime.save();
 }
@@ -85,7 +86,9 @@ async function desactivarAnime(id){
 }
 
 async function listarAnimesActivos(){
-	let anime = await Anime.find({"status": true});
+	let anime = await Anime
+		.find({"status": true})
+		.populate('autor', 'name -_id');
 	return anime;
 }
 

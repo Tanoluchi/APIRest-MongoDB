@@ -2,7 +2,7 @@ const express = require('express');
 const config = require('config');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const Usuario = require('../models/usuario_model.js');
+const Usuario = require('../models/usuario_model');
 const ruta = express.Router();
 
 ruta.post('/', (req, res) => {
@@ -14,7 +14,7 @@ ruta.post('/', (req, res) => {
 				if(!passwordValido) return res.status(400).json({error:'ok', msj: 'Usuario o contraseña incorrecta'});
 				// Creación del token
 				const jwToken = jwt.sign({
-					data: {_id: datos._id, name: datos.name, email: datos.email}
+					usuario: {_id: datos._id, name: datos.name, email: datos.email}
 				}, config.get('configToken.SEED'), {expiresIn: config.get('configToken.expiration')});
 				res.json({
 					usuario: {
