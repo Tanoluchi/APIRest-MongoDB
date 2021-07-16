@@ -52,7 +52,7 @@ async function crearAnime(req){
 	const newDate = moment(req.body.date)
 	let anime = new Anime({
 		title : req.body.title,
-		autor : req.usuario._id,
+		autor : req.usuario,
 		description : req.body.description,
 		gender : req.body.gender,
 		date : newDate.format(formato),
@@ -87,8 +87,7 @@ async function desactivarAnime(id){
 
 async function listarAnimesActivos(){
 	let anime = await Anime
-		.find({"status": true})
-		.populate('autor', 'name -_id');
+		.find({"status": true});
 	return anime;
 }
 

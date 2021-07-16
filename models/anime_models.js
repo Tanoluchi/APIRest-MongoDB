@@ -1,17 +1,19 @@
 const mongoose = require('mongoose');
 const moment = require('moment');
 const Schema = mongoose.Schema;
-
 moment.locale('es');
+
+const autorSchema = new mongoose.Schema({
+	name: String,
+	email: String
+})
 
 const animeSchema = new mongoose.Schema({
 	title: {
 		type: String,
 		required: true
 	},
-	autor: {
-		type: Schema.Types.ObjectId, ref: 'Usuario'
-	},
+	autor: autorSchema,
 	description: {
 		type: String,
 		required: true
